@@ -1,41 +1,26 @@
-# == Class: pam
-#
-# Full description of class pam here.
-#
-# === Parameters
-#
-# Document parameters here.
-#
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-# === Variables
-#
-# Here you should define a list of variables that this module would require.
-#
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if it
-#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should not be used in preference to class parameters  as of
-#   Puppet 2.6.)
-#
-# === Examples
-#
-#  class { pam:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
-#  }
-#
-# === Authors
-#
-# Author Name <author@domain.com>
-#
-# === Copyright
-#
-# Copyright 2011 Your name here, unless otherwise noted.
-#
-class pam {
-  require pam::params
+class pam (
+  $autload     = true,
+  $autorealize = true,
+) inherits pam::params {
 
+  validate_bool($autoload)
+  validate_bool($autorealize)
+
+  if $autoload {
+    # service_confs
+    $pam_service_conf_defaults = hiera('pam::service_conf::defaults', {})
+    $pam_service_confs         = hiera('pam::service_confs', {})
+    create_resources('::pam::service_conf', $pam_service_confs, $pam_service_conf_defaults)
+    # access_entries
+    $pam_access_entry_defaults = hiera('pam::access_entry::defaults', {})
+    $pam_access_entries        = hiera('pam::access_entries', {})
+    create_resources('::pam::access_entry', $pam_access_entries, $pam_access_entry_defaults)
+  }
+
+  if $autorealize {
+    Pam::Service_conf <| |>
+    Pam::Service_conf <<| tag == $::fqdn |>>
+    Pam::Access_entry <| |>
+    Pam::Access_entry <<| tag == $::fqdn |>>
+  }
 }
