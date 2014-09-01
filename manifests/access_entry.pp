@@ -7,7 +7,11 @@ define pam::access_entry (
   $origin     = 'LOCAL'
 ) {
 
-  require ::pam
+   # The base class must be included first because it is used by parameter defaults
+   # Pattern copied from puppetlabs apache module
+   if ! defined(Class['pam']) {
+     fail('You must include the pam base class before using any pam defined resources')
+   }
 
   # validate params
   case $permission {
