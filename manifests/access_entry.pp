@@ -7,7 +7,7 @@ define pam::access_entry (
   $origin     = 'LOCAL'
 ) {
 
-  Class['pam'] -> Pam::Access_entry <| |>
+  require ::pam
 
   # validate params
   case $permission {

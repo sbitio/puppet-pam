@@ -6,7 +6,7 @@ define pam::service_conf (
   $module
 ) {
 
-  Class['pam'] -> Pam::Service_conf <| |>
+  require ::pam
 
 # augtool> ins /files/etc/pam.d/sshd/999 after /files/etc/pam.d/sshd/last
 # augtool> set /files/etc/pam.d/sshd/999/type account
