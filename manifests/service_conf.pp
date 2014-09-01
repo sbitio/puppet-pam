@@ -16,10 +16,10 @@ define pam::service_conf (
 
   case $ensure {
     present: {
-      augeas { "${pam::params::conf_d_path}/${service}_${type}_${control}_${module}_${ensure}":
-        context => "/files${pam::params::conf_d_path}/${service}/",
+      augeas { "${::pam::conf_d_path}/${service}_${type}_${control}_${module}_${ensure}":
+        context => "/files${::pam::conf_d_path}/${service}/",
         # TO-DO: Better performance with lens defined? "augtool ls /augeas/files/etc/pam.d/sshd"
-        incl    => "${pam::params::conf_d_path}/${service}",
+        incl    => "${::pam::conf_d_path}/${service}",
         lens    => 'Pam.lns',
         onlyif  => "match *[type = '${type}'][control = '${control}'][module = '${module}'] size == 0",
         changes => [
@@ -32,10 +32,10 @@ define pam::service_conf (
       }
     }
     absent: {
-      augeas { "${pam::params::conf_d_path}/${service}_${type}_${control}_${module}_${ensure}":
-        context => "/files${pam::params::conf_d_path}/${service}/",
+      augeas { "${::pam::conf_d_path}/${service}_${type}_${control}_${module}_${ensure}":
+        context => "/files${::pam::conf_d_path}/${service}/",
         # TO-DO: Better performance with lens defined? "augtool ls /augeas/files/etc/pam.d/sshd"
-        incl    => "${pam::params::conf_d_path}/${service}",
+        incl    => "${::pam::conf_d_path}/${service}",
         lens    => 'Pam.lns',
         onlyif  => "match *[type = '${type}'][control = '${control}'][module = '${module}'] size > 0",
         changes => "rm *[type = '${type}'][control = '${control}'][module = '${module}']",
