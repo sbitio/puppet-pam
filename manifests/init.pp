@@ -1,5 +1,5 @@
 class pam (
-  $autload     = true,
+  $autoload    = true,
   $autorealize = true,
 ) inherits pam::params {
 
