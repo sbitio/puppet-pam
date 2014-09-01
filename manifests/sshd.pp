@@ -25,5 +25,5 @@ class pam::sshd (
       origin     => 'ALL',
     }
   }
-} 
+
 }
