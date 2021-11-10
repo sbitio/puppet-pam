@@ -9,6 +9,7 @@ class pam::sshd (
     type    => 'account',
     control => 'required',
     module  => 'pam_access.so',
+    require => Class['::ssh::server'],
   }
 
   if $protect_root {
