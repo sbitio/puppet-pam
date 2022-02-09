@@ -1,4 +1,7 @@
+# pam::access_entry
+#
 # Loosely based on https://github.com/huit/puppet-pam_access/blob/master/manifests/entry.pp
+#
 define pam::access_entry (
   $ensure     = present,
   $permission = '+',

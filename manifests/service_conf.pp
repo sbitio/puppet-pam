@@ -1,3 +1,7 @@
+# pam::service_conf
+#
+# This defined type is responsible for configuring the service
+#
 define pam::service_conf (
   $type,
   $control,
