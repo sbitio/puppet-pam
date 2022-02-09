@@ -6,11 +6,11 @@ define pam::service_conf (
   $module
 ) {
 
-   # The base class must be included first because it is used by parameter defaults
-   # Pattern copied from puppetlabs apache module
-   if ! defined(Class['pam']) {
-     fail('You must include the pam base class before using any pam defined resources')
-   }
+# The base class must be included first because it is used by parameter defaults
+# Pattern copied from puppetlabs apache module
+  if ! defined(Class['pam']) {
+    fail('You must include the pam base class before using any pam defined resources')
+  }
 
 # augtool> ins /files/etc/pam.d/sshd/999 after /files/etc/pam.d/sshd/last
 # augtool> set /files/etc/pam.d/sshd/999/type account
