@@ -48,7 +48,7 @@ define pam::access_entry (
       # Insert bulk
       augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_bulk":
         context => $context,
-        incl    => "${::pam::access_conf}",
+        incl    => $::pam::access_conf,
         lens    => 'Access.lns',
         onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'] size == 0",
         changes => [
@@ -62,7 +62,7 @@ define pam::access_entry (
         '+': {
           augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_move":
             context => $context,
-            incl    => "${::pam::access_conf}",
+            incl    => $::pam::access_conf,
             lens    => 'Access.lns',
             onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'][preceding-sibling::*[self::access[. = '${opposite_permission}'][user = '${userstr}']]] size > 0",
             changes => [
@@ -76,7 +76,7 @@ define pam::access_entry (
         '-': {
           augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_move":
             context => $context,
-            incl    => "${::pam::access_conf}",
+            incl    => $::pam::access_conf,
             lens    => 'Access.lns',
             onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'][following-sibling::*[self::access[. = '${opposite_permission}'][user = '${userstr}']]] size > 0",
             changes => [
@@ -95,7 +95,7 @@ define pam::access_entry (
     absent: {
       augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}":
         context => $context,
-        incl    => "${::pam::access_conf}",
+        incl    => $::pam::access_conf,
         lens    => 'Access.lns',
         #TO-DO : tener en cuenta origin
         onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'] size > 0",
