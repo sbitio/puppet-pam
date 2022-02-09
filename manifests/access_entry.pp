@@ -87,6 +87,9 @@ define pam::access_entry (
             require => Augeas["/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_bulk"],
           }
         }
+        default: {
+          fail("Invalid value for permission parameter: ${permission}")
+        }
       }
     }
     absent: {
