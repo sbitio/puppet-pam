@@ -27,7 +27,7 @@ define pam::service_conf (
         lens    => 'Pam.lns',
         onlyif  => "match *[type = '${type}'][control = '${control}'][module = '${module}'] size == 0",
         changes => [
-          "ins 99999 after *[last()]",
+          'ins 99999 after *[last()]',
           "set 99999/type ${type}",
           "set 99999/control ${control}",
           "set 99999/module ${module}",
