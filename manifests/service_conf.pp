@@ -1,16 +1,20 @@
+# pam::service_conf
+#
+# This defined type is responsible for configuring the service
+#
 define pam::service_conf (
-  $ensure = present,
-  $service = $title,
   $type,
   $control,
-  $module
+  $module,
+  $ensure = present,
+  $service = $title,
 ) {
 
-   # The base class must be included first because it is used by parameter defaults
-   # Pattern copied from puppetlabs apache module
-   if ! defined(Class['pam']) {
-     fail('You must include the pam base class before using any pam defined resources')
-   }
+# The base class must be included first because it is used by parameter defaults
+# Pattern copied from puppetlabs apache module
+  if ! defined(Class['pam']) {
+    fail('You must include the pam base class before using any pam defined resources')
+  }
 
 # augtool> ins /files/etc/pam.d/sshd/999 after /files/etc/pam.d/sshd/last
 # augtool> set /files/etc/pam.d/sshd/999/type account
@@ -27,7 +31,7 @@ define pam::service_conf (
         lens    => 'Pam.lns',
         onlyif  => "match *[type = '${type}'][control = '${control}'][module = '${module}'] size == 0",
         changes => [
-          "ins 99999 after *[last()]",
+          'ins 99999 after *[last()]',
           "set 99999/type ${type}",
           "set 99999/control ${control}",
           "set 99999/module ${module}",

@@ -1,3 +1,7 @@
+# pam::sshd
+#
+# ##TODO## Add a description
+#
 class pam::sshd (
   $ensure       = present,
   $protect_root = true,

@@ -1,3 +1,7 @@
+# pam
+#
+# This class is responsible for installing and configuring the PAM service
+#
 class pam (
   $autoload    = true,
   $autorealize = true,

@@ -1,4 +1,7 @@
+# pam::access_entry
+#
 # Loosely based on https://github.com/huit/puppet-pam_access/blob/master/manifests/entry.pp
+#
 define pam::access_entry (
   $ensure     = present,
   $permission = '+',
@@ -7,11 +10,11 @@ define pam::access_entry (
   $origin     = 'LOCAL'
 ) {
 
-   # The base class must be included first because it is used by parameter defaults
-   # Pattern copied from puppetlabs apache module
-   if ! defined(Class['pam']) {
-     fail('You must include the pam base class before using any pam defined resources')
-   }
+# The base class must be included first because it is used by parameter defaults
+# Pattern copied from puppetlabs apache module
+  if ! defined(Class['pam']) {
+    fail('You must include the pam base class before using any pam defined resources')
+  }
 
   # validate params
   case $permission {
@@ -48,7 +51,7 @@ define pam::access_entry (
       # Insert bulk
       augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_bulk":
         context => $context,
-        incl    => "${::pam::access_conf}",
+        incl    => $::pam::access_conf,
         lens    => 'Access.lns',
         onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'] size == 0",
         changes => [
@@ -62,7 +65,7 @@ define pam::access_entry (
         '+': {
           augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_move":
             context => $context,
-            incl    => "${::pam::access_conf}",
+            incl    => $::pam::access_conf,
             lens    => 'Access.lns',
             onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'][preceding-sibling::*[self::access[. = '${opposite_permission}'][user = '${userstr}']]] size > 0",
             changes => [
@@ -76,7 +79,7 @@ define pam::access_entry (
         '-': {
           augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_move":
             context => $context,
-            incl    => "${::pam::access_conf}",
+            incl    => $::pam::access_conf,
             lens    => 'Access.lns',
             onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'][following-sibling::*[self::access[. = '${opposite_permission}'][user = '${userstr}']]] size > 0",
             changes => [
@@ -87,12 +90,15 @@ define pam::access_entry (
             require => Augeas["/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}_bulk"],
           }
         }
+        default: {
+          fail("Invalid value for permission parameter: ${permission}")
+        }
       }
     }
     absent: {
       augeas { "/files${::pam::access_conf}_${permission}_${userstr}_${origin}_${ensure}":
         context => $context,
-        incl    => "${::pam::access_conf}",
+        incl    => $::pam::access_conf,
         lens    => 'Access.lns',
         #TO-DO : tener en cuenta origin
         onlyif  => "match access[. = '${permission}'][user = '${userstr}'][origin = '${origin}'] size > 0",
