@@ -3,12 +3,9 @@
 # This class is responsible for installing and configuring the PAM service
 #
 class pam (
-  $autoload    = true,
-  $autorealize = true,
+  Boolean $autoload    = true,
+  Boolean $autorealize = true,
 ) inherits pam::params {
-
-  validate_bool($autoload)
-  validate_bool($autorealize)
 
   if $autoload {
     # service_confs
